@@ -9,6 +9,8 @@ function Signup({ onLoginClick }) {
 
   const [message, setMessage] = useState("");
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -18,19 +20,17 @@ function Signup({ onLoginClick }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setMessage("Creating account...");
 
     try {
-      const response = await fetch(
-        "https://week3-backend-yg2x.onrender.com/api/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(form),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
 
       const data = await response.json();
 
@@ -47,7 +47,7 @@ function Signup({ onLoginClick }) {
         password: "",
       });
     } catch (error) {
-      console.error(error);
+      console.error("Signup error:", error);
       setMessage("Backend se connection nahi ho raha");
     }
   };
@@ -112,6 +112,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    fontFamily: "Arial, sans-serif",
   },
 
   card: {
@@ -120,6 +121,7 @@ const styles = {
     border: "1px solid #ddd",
     borderRadius: "12px",
     textAlign: "center",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
   },
 
   input: {
@@ -127,12 +129,16 @@ const styles = {
     padding: "12px",
     marginBottom: "12px",
     boxSizing: "border-box",
+    border: "1px solid #ccc",
+    borderRadius: "6px",
   },
 
   button: {
     width: "100%",
     padding: "12px",
     cursor: "pointer",
+    border: "none",
+    borderRadius: "6px",
   },
 
   link: {
