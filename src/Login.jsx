@@ -5,24 +5,24 @@ function Login({ onLoginSuccess, onSignupClick }) {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setMessage("Logging in...");
 
     try {
-      const response = await fetch(
-        "https://week3-backend-yg2x.onrender.com/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
       const data = await response.json();
 
@@ -37,7 +37,9 @@ function Login({ onLoginSuccess, onSignupClick }) {
       setMessage("Login successful!");
 
       // Send token to App.jsx
-      onLoginSuccess(data.token);
+      if (onLoginSuccess) {
+        onLoginSuccess(data.token);
+      }
     } catch (error) {
       console.error("Login error:", error);
       setMessage("Backend se connection nahi ho raha");
